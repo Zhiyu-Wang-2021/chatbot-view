@@ -4,9 +4,13 @@ import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogT
 import Box from "@mui/material/Box";
 
 import axios from "axios";
-const instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/generate_json/",
+const register_instance = axios.create({
+    baseURL: "http://127.0.0.1:8000/register_url/",
     timeout: 1000
+})
+const generate_instance = axios.create({
+    baseURL: "http://127.0.0.1:8000/generate_json/",
+    timeout: 1000 * 60 * 10
 })
 
 export default function UrlInput() {
@@ -25,15 +29,18 @@ export default function UrlInput() {
     };
 
     const handleUrlSubmit = async () => {
-        let referenceNum = await instance.post("", {
-            "url": urlRef.current.value,
-            "answers": {
-                "operation_hour": "7:45-22:00",
-                "location": "Great Ormond Street Hospital for Children NHS Foundation Trust\nGreat Ormond Street\nLondon\nWC1N 3JH"
-            }
-        })
+        let referenceNum = await register_instance.post("", {
+            "url": urlRef.current.value
+        })  // use .data to fetch information in the axios promise
         handleClickOpen(referenceNum)
-        return console.log("Success: " + referenceNum.data)
+        console.log(referenceNum)
+        generate_instance.post("", {
+            "url": urlRef.current.value,
+            "ref": referenceNum.data
+        }).then(() => {
+            console.log("json generated")
+        })
+        return console.log("waiting dialog json to be generated: " + referenceNum.data)
     }
     return (
         <div>
