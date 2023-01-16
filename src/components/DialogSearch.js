@@ -42,7 +42,7 @@ export default function DialogSearch() {
             <Box
                 component="form"
                 sx={{
-                    '& > :not(style)': { m: 1, width: '100ch' },
+                    '& > :not(style)': { m: 1},
                 }}
                 noValidate
                 autoComplete="off"

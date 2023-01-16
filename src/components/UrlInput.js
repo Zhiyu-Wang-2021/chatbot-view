@@ -2,6 +2,8 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import Box from "@mui/material/Box";
+import Snackbar from '@mui/material/Snackbar';
+import LinearProgress from '@mui/material/LinearProgress';
 
 import axios from "axios";
 const register_instance = axios.create({
@@ -14,40 +16,68 @@ const generate_instance = axios.create({
 })
 
 export default function UrlInput() {
+    const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    const handleSuccOpen = () => {
+        setIsOpenSuccNotif(true);
+    };
+
+    const handleSuccClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setIsOpenSuccNotif(false);
+    };
+
     const [refNum, setRefNum] = React.useState('')
     const urlRef = React.useRef('')
 
-    const [open, setOpen] = React.useState(false);
-    const handleClickOpen = (referenceNum) => {
+    const [openSubmitNotif, setOpenSubmitNotif] = React.useState(false);
+    const handleClickOpenSubmitNotif = (referenceNum) => {
         console.log(refNum)
         setRefNum(referenceNum)
-        setOpen(true);
+        setOpenSubmitNotif(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleCloseSubmitNotif = () => {
+        setOpenSubmitNotif(false);
     };
 
     const handleUrlSubmit = async () => {
+
         let referenceNum = await register_instance.post("", {
             "url": urlRef.current.value
         })  // use .data to fetch information in the axios promise
-        handleClickOpen(referenceNum)
+        handleClickOpenSubmitNotif(referenceNum)
         console.log(referenceNum)
+        setIsLoading(true)
         generate_instance.post("", {
             "url": urlRef.current.value,
             "ref": referenceNum.data
         }).then(() => {
             console.log("json generated")
+            handleSuccOpen()
+            setIsLoading(false)
         })
         return console.log("waiting dialog json to be generated: " + referenceNum.data)
     }
+
+
+
+
+
     return (
         <div>
+            <Box sx={{ display: isLoading ? 'relative' : 'none' }} >
+                <p>generating...</p>
+                <LinearProgress />
+            </Box>
             <Box
                 component="form"
                 sx={{
-                    '& > :not(style)': { m: 1, width: '100ch' },
+                    '& > :not(style)': { m: 1},
                 }}
                 noValidate
                 autoComplete="off"
@@ -62,8 +92,8 @@ export default function UrlInput() {
                 <Button variant="contained" onClick={ handleUrlSubmit }>Submit</Button>
             </Box>
             <Dialog
-                open={open}
-                onClose={handleClose}
+                open={openSubmitNotif}
+                onClose={handleCloseSubmitNotif}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
@@ -79,11 +109,17 @@ export default function UrlInput() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} autoFocus>
+                    <Button onClick={handleCloseSubmitNotif} autoFocus>
                         OK
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar
+                open={isOpenSuccNotif}
+                autoHideDuration={6000}
+                onClose={handleSuccClose}
+                message="JSON successfully generated"
+            />
         </div>
     );
 }
