@@ -16,7 +16,9 @@ export default function DialogSearch() {
         try {
             let answer = await instance.get("get_json/?id=" +　dialogRef.current.value)
             console.log(answer.data)
-            setDialogJson(JSON.stringify(answer.data))
+            let result = answer.data
+            if(Object.keys(result).length === 0) setDialogJson("Generating...")
+            else setDialogJson(JSON.stringify(answer.data))
         } catch (e) {
             setDialogJson("Not Found")
         }

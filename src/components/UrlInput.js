@@ -1,6 +1,6 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import {Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import Box from "@mui/material/Box";
 import Snackbar from '@mui/material/Snackbar';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -17,6 +17,7 @@ const generate_instance = axios.create({
 
 export default function UrlInput() {
     const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false);
+    const [isSucc, setIsSucc] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false)
 
     const handleSuccOpen = () => {
@@ -30,6 +31,11 @@ export default function UrlInput() {
 
         setIsOpenSuccNotif(false);
     };
+
+    const notifMsg = () => {
+        if(isSucc) return "JSON successfully generated"
+        else return "JSON fail to generate"
+    }
 
     const [refNum, setRefNum] = React.useState('')
     const urlRef = React.useRef('')
@@ -60,19 +66,22 @@ export default function UrlInput() {
             generate_instance.post("", {
                 "url": urlRef.current.value,
                 "ref": referenceNum.data
-            }).catch((err) => {
-                console.log("generation failed")
-                console.log(err.message)
             }).then(() => {
                 console.log("json generated")
+                setIsSucc(true)
                 handleSuccOpen()
                 setIsLoading(false)
             }).catch((err) => {
                 console.log("generation failed")
                 console.log(err.message)
+                setIsSucc(false)
+                handleSuccOpen()
+                setIsLoading(false)
             })
             console.log("waiting dialog json to be generated: " + referenceNum.data)
         } else {
+            setIsSucc(false)
+            handleSuccOpen()
             console.log("submit failed")
         }
     }
@@ -131,8 +140,11 @@ export default function UrlInput() {
                 open={isOpenSuccNotif}
                 autoHideDuration={6000}
                 onClose={handleSuccClose}
-                message="JSON successfully generated"
-            />
+            >
+                <Alert onClose={handleSuccClose} severity={isSucc ? "success" : "error"} sx={{ width: '100%' }}>
+                    {isSucc ? "JSON successfully generated" : "JSON fail to generate"}
+                </Alert>
+            </Snackbar>
         </div>
     );
 }
