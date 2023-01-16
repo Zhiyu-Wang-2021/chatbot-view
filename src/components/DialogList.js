@@ -32,7 +32,10 @@ export default function DialogList() {
                             createData(row["url"], row["dialog_ref"]["$oid"], row["_id"]["$oid"])
                         ).reverse()
                     )
-            ))
+            )).catch((err) => {
+                console.log("get list failed")
+                console.log(err.message)
+            })
     }
     useEffect(refreshTable, [])
 

@@ -36,7 +36,7 @@ export default function UrlInput() {
 
     const [openSubmitNotif, setOpenSubmitNotif] = React.useState(false);
     const handleClickOpenSubmitNotif = (referenceNum) => {
-        console.log(refNum)
+
         setRefNum(referenceNum)
         setOpenSubmitNotif(true);
     };
@@ -49,19 +49,32 @@ export default function UrlInput() {
 
         let referenceNum = await register_instance.post("", {
             "url": urlRef.current.value
+        }).catch((err) => {
+            console.log("register failed")
+            console.log(err.message)
         })  // use .data to fetch information in the axios promise
-        handleClickOpenSubmitNotif(referenceNum)
-        console.log(referenceNum)
-        setIsLoading(true)
-        generate_instance.post("", {
-            "url": urlRef.current.value,
-            "ref": referenceNum.data
-        }).then(() => {
-            console.log("json generated")
-            handleSuccOpen()
-            setIsLoading(false)
-        })
-        return console.log("waiting dialog json to be generated: " + referenceNum.data)
+        if(referenceNum) {
+            handleClickOpenSubmitNotif(referenceNum)
+            console.log(referenceNum)
+            setIsLoading(true)
+            generate_instance.post("", {
+                "url": urlRef.current.value,
+                "ref": referenceNum.data
+            }).catch((err) => {
+                console.log("generation failed")
+                console.log(err.message)
+            }).then(() => {
+                console.log("json generated")
+                handleSuccOpen()
+                setIsLoading(false)
+            }).catch((err) => {
+                console.log("generation failed")
+                console.log(err.message)
+            })
+            console.log("waiting dialog json to be generated: " + referenceNum.data)
+        } else {
+            console.log("submit failed")
+        }
     }
 
 
@@ -98,7 +111,7 @@ export default function UrlInput() {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Chatbot successfully generated"}
+                    {"Your chatbot will be ready in 10 minutes"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
