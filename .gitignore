@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+/.idea/
+/src/chatbot_test.json
+/chatbot-view.iml
