@@ -2,6 +2,7 @@ import './App.css';
 import DialogSearch from "./components/DialogSearch";
 import UrlInput from "./components/UrlInput";
 import DialogList from "./components/DialogList";
+import ChatbotPreview from "./components/ChatbotPreview";
 import {Divider} from "@mui/material";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
             <DialogSearch />
             <Divider sx={{margin: "15px"}}/>
             <DialogList />
+            <ChatbotPreview />
         </div>
     </div>
   );
