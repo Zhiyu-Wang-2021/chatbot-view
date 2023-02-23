@@ -32,10 +32,10 @@ export default function UrlInput() {
         setIsOpenSuccNotif(false);
     };
 
-    const notifMsg = () => {
-        if(isSucc) return "JSON successfully generated"
-        else return "JSON fail to generate"
-    }
+    // const notifMsg = () => {
+    //     if(isSucc) return "JSON successfully generated"
+    //     else return "JSON fail to generate"
+    // }
 
     const [refNum, setRefNum] = React.useState('')
     const urlRef = React.useRef('')

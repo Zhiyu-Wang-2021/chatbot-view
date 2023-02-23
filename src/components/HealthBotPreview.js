@@ -30,7 +30,7 @@ export default function HealthBotPreview() {
                     height: "100%",
                     overflow: "hidden"
                 }}>
-                    <iframe id="healthBot" src="https://healthcare-bot-j4ipj6gcnqsvw.azurewebsites.net" style={{
+                    <iframe id="healthBot" title="healthBot" src="https://healthcare-bot-j4ipj6gcnqsvw.azurewebsites.net" style={{
                         width: "99%",
                         height: "99%",
                         margin: 'auto'

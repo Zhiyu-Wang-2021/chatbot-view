@@ -1,11 +1,4 @@
 import * as React from 'react';
-import axios from "axios";
-
-
-const instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/url_list/",
-    timeout: 1000
-})
 
 export default function ChatbotPreview() {
     window.watsonAssistantChatOptions = {
