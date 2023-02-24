@@ -11,7 +11,7 @@ const register_instance = axios.create({
     timeout: 1000
 })
 const generate_instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/generate_json/",
+    baseURL: "http://127.0.0.1:8000/generate_json_e/",
     timeout: 1000 * 60 * 10
 })
 
