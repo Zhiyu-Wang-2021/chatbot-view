@@ -3,11 +3,11 @@ import Chatbot, {createCustomMessage} from "react-chatbot-kit";
 import ChatIcon from '@mui/icons-material/Chat';
 import 'react-chatbot-kit/build/main.css'
 
-import {validateInput, saveMessages, loadMessages} from "./CustomizedChatbot/chatbot"
+import {validateInput, saveMessages, loadMessages} from "./chatbot"
 import {Fab} from "@mui/material";
 
-import {getBearerToken, getWorkspaceId, sendMsgToWatsonAssistant} from "./CustomizedChatbot/watsonAssistantConnection";
-import HtmlMessage from "./CustomizedChatbot/customMsg";
+import {getBearerToken, getWorkspaceList, sendMsgToWatsonAssistant} from "./watsonAssistantConnection";
+import HtmlMessage from "./customMsg";
 
 const botName = "ExperimentBot"
 
@@ -125,13 +125,13 @@ export default function ChatbotPreview() {
         setShowBot(true)
         let accessToken
         try {
-            accessToken = (await getBearerToken())["access_token"]
+            accessToken = token === "" ? (await getBearerToken())["access_token"] : token
         } catch (e) {
             console.error("failed to get a token")
         }
         let wsId
         try {
-            wsId = (await getWorkspaceId(accessToken, instanceId))["workspaces"][0]["workspace_id"]
+            wsId = workspaceId === "" ? (await getWorkspaceList(accessToken, instanceId))["workspaces"][0]["workspace_id"] : workspaceId
             console.log("workspace id:\n" + wsId)
         } catch (e) {
             console.error("failed to get the workspace id")

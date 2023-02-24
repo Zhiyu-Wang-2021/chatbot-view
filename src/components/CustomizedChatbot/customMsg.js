@@ -6,8 +6,8 @@ export default function HtmlMessage(props){
 
     return (
         <Card sx={{
-            backgroundColor: '#1565c0',
-            color: "white",
+            backgroundColor: 'rgba(21,101,192,0.2)',
+            color: "black",
             textAlign: "left",
             fontSize: "13px",
             padding: "0px 10px 5px 10px",

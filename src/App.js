@@ -3,7 +3,7 @@ import DialogSearch from "./components/DialogSearch";
 import UrlInput from "./components/UrlInput";
 import DialogList from "./components/DialogList";
 import {Divider} from "@mui/material";
-import CustomizedBotPreview from "./components/CustomizedBotPreview"
+import CustomizedBotPreview from "./components/CustomizedChatbot/CustomizedBotPreview"
 
 function App() {
   return (
@@ -16,8 +16,6 @@ function App() {
             <DialogSearch />
             <Divider sx={{margin: "15px"}}/>
             <DialogList />
-            {/*<ChatbotPreview />*/}
-            {/*<HealthBotPreview />*/}
             <CustomizedBotPreview />
         </div>
     </div>
