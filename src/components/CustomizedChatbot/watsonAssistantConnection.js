@@ -45,7 +45,7 @@ export const newWorkspace = async (token, instanceId, dialogJson) => {
         body: dialogJson
     };
 
-    fetch(url, options)
+    return await fetch(url, options)
         .then(res => res.json())
         .catch(err => console.error('error:' + err));
 }

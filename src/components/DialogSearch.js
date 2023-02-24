@@ -1,45 +1,63 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
-import {Button, ButtonGroup} from "@mui/material";
+import {Alert, Button, ButtonGroup} from "@mui/material";
 import Box from "@mui/material/Box";
 import AssistantV1 from 'ibm-watson/assistant/v1';
 import { IamAuthenticator } from 'ibm-watson/auth';
+import {
+    newWorkspace,
+    delWorkspaceById,
+    getWorkspaceList,
+    getBearerToken
+} from "./CustomizedChatbot/watsonAssistantConnection";
 
 import axios from "axios";
+import Snackbar from "@mui/material/Snackbar";
 const instance = axios.create({
     baseURL: "http://127.0.0.1:8000/",
     timeout: 1000
 })
 
-const assistant = new AssistantV1({
-    version: '2021-06-14',
-    authenticator: new IamAuthenticator({
-        apikey: 'Ule1_N_4m7cNREs9LY9KBoipHhxQpMACQP8EIaRyfrEs',
-    }),
-    disableSslVerification: true,
-    serviceUrl: 'https://api.us-south.assistant.watson.cloud.ibm.com/instances/d049a552-ee69-4a04-aa9b-1fa4e7994ece',
-});
-
-export default function DialogSearch() {
+export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
     const dialogRef = React.useRef('')
+    const [allowPreview, setAllowPreview] = React.useState(false)
     const [dialogJson, setDialogJson] = React.useState("")
-    const handleUrlSubmit = async () => {
+    const [isSucc, setIsSucc] = React.useState(false);
+    const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false);
+
+    const handleSuccOpen = () => {
+        setIsOpenSuccNotif(true);
+    };
+
+    const handleSuccClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setIsOpenSuccNotif(false);
+    };
+
+    const handleRefCodeSubmit = async () => {
         try {
             let answer = await instance.get("get_json/?id=" +　dialogRef.current.value)
             console.log(answer.data)
             let result = answer.data
-            if(Object.keys(result).length === 0) setDialogJson("Generating...")
-            else setDialogJson(JSON.stringify(answer.data))
+            if(Object.keys(result).length === 0) setDialogJson("JSON still generating or there are some errors")
+            else {
+                setDialogJson(JSON.stringify(answer.data))
+                setAllowPreview(true)
+            }
         } catch (e) {
             setDialogJson("Not Found")
         }
-
     }
+
     const handleCopy = () => {
         navigator.clipboard.writeText(dialogJson).then(
             () => console.log('copied')
         )
     }
+
     const handleDownload = () => {
         const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
             dialogJson
@@ -51,19 +69,44 @@ export default function DialogSearch() {
         link.click();
     }
 
-    const handlePreview = () => {
+    const handlePreview = async () => {
         try {
-            assistant.listWorkspaces()
-                .then(res => {
-                    console.log(JSON.stringify(res.result, null, 2));
+            setAllowPreview(false)
+            let token = wtsnAssistant.token
+            if(token === ""){
+                token = (await getBearerToken())["access_token"]
+                setWtsnAssistant({
+                    token: token,
+                    instanceId: wtsnAssistant.instanceId,
+                    workspaceId: wtsnAssistant.workspaceId
                 })
-                .catch(err => {
-                    console.log(err)
-                });
-        } catch (e){
-            console.log(e)
+            }
+            const workspaces = await getWorkspaceList(token, wtsnAssistant.instanceId)
+            const workspaceIds = workspaces["workspaces"].map(ws => ws["workspace_id"])
+            console.log(workspaceIds)
+            for(let i = 0; i < workspaceIds.length; i++){
+                await delWorkspaceById(token, wtsnAssistant.instanceId, workspaceIds[i])
+            }
+            const newWS = await newWorkspace(token, wtsnAssistant.instanceId, dialogJson)
+
+            const newWSID = newWS["workspace_id"]
+            console.log(newWSID)
+            setWtsnAssistant({
+                token: wtsnAssistant.token,
+                instanceId: wtsnAssistant.instanceId,
+                workspaceId: newWSID
+            })
+
+            setIsSucc(true)
+            handleSuccOpen()
+            console.log("workspace set successful")
+        } catch (e) {
+            setAllowPreview(true)
+            setIsSucc(false)
+            console.error(e)
         }
     }
+
 
     return (
         <div>
@@ -82,7 +125,7 @@ export default function DialogSearch() {
                     variant="standard"
                     inputRef={ dialogRef }
                 />
-                <Button variant="contained" onClick={ handleUrlSubmit }>Submit</Button>
+                <Button variant="contained" onClick={ handleRefCodeSubmit }>Submit</Button>
                 <TextField
                     disabled
                     fullWidth
@@ -98,8 +141,17 @@ export default function DialogSearch() {
             <ButtonGroup variant="contained" aria-label="text button group">
                 <Button onClick={handleCopy} >Copy to clipboard</Button>
                 <Button onClick={handleDownload}>Download</Button>
-                <Button onClick={handlePreview} disabled>Preview</Button>
+                <Button onClick={handlePreview} disabled={!allowPreview}>Preview</Button>
             </ButtonGroup>
+            <Snackbar
+                open={isOpenSuccNotif}
+                autoHideDuration={6000}
+                onClose={handleSuccClose}
+            >
+                <Alert onClose={handleSuccClose} severity={isSucc ? "success" : "error"} sx={{ width: '100%' }}>
+                    {isSucc ? "Preview ready" : "JSON fail to submit"}
+                </Alert>
+            </Snackbar>
         </div>
 
 
