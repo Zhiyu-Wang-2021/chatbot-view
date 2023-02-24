@@ -5,6 +5,7 @@ import UrlInput from "./components/UrlInput";
 import DialogList from "./components/DialogList";
 import {Divider} from "@mui/material";
 import CustomizedBotPreview from "./components/CustomizedChatbot/CustomizedBotPreview"
+import Navbar from "./components/Navbar";
 
 function App() {
 
@@ -16,7 +17,9 @@ function App() {
 
   return (
         <div className="App">
+            <Navbar/>
             <div style={{
+                marginTop: "80px",
                 margin: "auto",
                 width: "60%"
             }}>
