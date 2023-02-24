@@ -2,8 +2,6 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import {Alert, Button, ButtonGroup} from "@mui/material";
 import Box from "@mui/material/Box";
-import AssistantV1 from 'ibm-watson/assistant/v1';
-import { IamAuthenticator } from 'ibm-watson/auth';
 import {
     newWorkspace,
     delWorkspaceById,
@@ -13,6 +11,7 @@ import {
 
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
+import LinearProgress from "@mui/material/LinearProgress";
 const instance = axios.create({
     baseURL: "http://127.0.0.1:8000/",
     timeout: 1000
@@ -20,6 +19,7 @@ const instance = axios.create({
 
 export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
     const dialogRef = React.useRef('')
+    const [loadingPreview, setLoadingPreview] = React.useState(false)
     const [allowPreview, setAllowPreview] = React.useState(false)
     const [dialogJson, setDialogJson] = React.useState("")
     const [isSucc, setIsSucc] = React.useState(false);
@@ -71,6 +71,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
 
     const handlePreview = async () => {
         try {
+            setLoadingPreview(true)
             setAllowPreview(false)
             let token = wtsnAssistant.token
             if(token === ""){
@@ -98,11 +99,13 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
             })
 
             setIsSucc(true)
+            setLoadingPreview(false)
             handleSuccOpen()
             console.log("workspace set successful")
         } catch (e) {
             setAllowPreview(true)
             setIsSucc(false)
+            setLoadingPreview(false)
             console.error(e)
         }
     }
@@ -143,9 +146,21 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
                 <Button onClick={handleDownload}>Download</Button>
                 <Button onClick={handlePreview} disabled={!allowPreview}>Preview</Button>
             </ButtonGroup>
+            {
+                loadingPreview && (
+                    <Box sx={{
+                        width: "60%",
+                        marginTop: "5px",
+                        margin: "auto"
+                    }}>
+                        <p>Loading preview</p>
+                        <LinearProgress />
+                    </Box>
+                )
+            }
             <Snackbar
                 open={isOpenSuccNotif}
-                autoHideDuration={6000}
+                autoHideDuration={18000}
                 onClose={handleSuccClose}
             >
                 <Alert onClose={handleSuccClose} severity={isSucc ? "success" : "error"} sx={{ width: '100%' }}>
