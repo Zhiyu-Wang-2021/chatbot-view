@@ -6,12 +6,13 @@ import Snackbar from '@mui/material/Snackbar';
 import LinearProgress from '@mui/material/LinearProgress';
 
 import axios from "axios";
+import {backendBaseUrl} from "../env";
 const register_instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/register_url/",
+    baseURL: backendBaseUrl + "register_url/",
     timeout: 1000
 })
 const generate_instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/generate_json_e/",
+    baseURL: backendBaseUrl + "generate_json_e/",
     timeout: 1000 * 60 * 10
 })
 

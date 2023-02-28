@@ -1,5 +1,3 @@
-import assert from "assert";
-
 export const getBearerToken = async (IAMKey) => {
     console.log(IAMKey)
     const options = {

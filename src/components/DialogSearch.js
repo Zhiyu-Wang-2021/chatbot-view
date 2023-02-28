@@ -13,8 +13,10 @@ import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import LinearProgress from "@mui/material/LinearProgress";
 import * as assert from "assert";
+import {backendBaseUrl} from "../env";
+
 const instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/",
+    baseURL: backendBaseUrl,
     timeout: 1000
 })
 

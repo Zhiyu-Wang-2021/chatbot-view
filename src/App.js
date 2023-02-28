@@ -6,15 +6,14 @@ import DialogList from "./components/DialogList";
 import {Divider} from "@mui/material";
 import CustomizedBotPreview from "./components/CustomizedChatbot/CustomizedBotPreview"
 import Navbar from "./components/Navbar";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
 import Settings from "./components/Settings";
+import {iamKey, instanceId} from "./env";
 
 function App() {
     const [settingOpen, setSettingOpen] = React.useState(false)
     const [wtsnAssistant, setWtsnAssistant] = React.useState({
-        iamKey: "fK1ry7X3D0HFVHC_kJXKlLA6900sxeHH6Yc0MKtEdGHm",
-        instanceId: "d049a552-ee69-4a04-aa9b-1fa4e7994ece",
+        iamKey: iamKey,
+        instanceId: instanceId,
         workspaceId: "",
         token: ""
     })

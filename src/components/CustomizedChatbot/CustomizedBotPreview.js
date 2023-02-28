@@ -4,7 +4,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import 'react-chatbot-kit/build/main.css'
 
 import {validateInput, saveMessages, loadMessages} from "./chatbot"
-import {Fab} from "@mui/material";
+import {CircularProgress, Fab} from "@mui/material";
 
 import {getBearerToken, getWorkspaceList, sendMsgToWatsonAssistant} from "./watsonAssistantConnection";
 import HtmlMessage from "./customMsg";
@@ -15,6 +15,7 @@ const botName = "NHSBot"
 
 export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
     const [showBot, setShowBot] = React.useState(false)
+    const [isConnecting, setIsConnecting] = React.useState(false)
 
     const chatbotConfig = {
         state: {
@@ -89,7 +90,7 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
         );
     };
 
-    const ActionProvider = ({ createChatBotMessage, setState, children }) => {
+    const ActionProvider = ({ setState, children }) => {
         const handleMessage = async (userMsg) => {
 
             const resp = await sendMsgToWatsonAssistant(wtsnAssistant.instanceId, wtsnAssistant.workspaceId, wtsnAssistant.token, userMsg)
@@ -121,24 +122,28 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
     };
     const handleStartChatSession = async () => {
         console.log(wtsnAssistant)
-        setShowBot(true)
         let accessToken
         try {
-            accessToken = wtsnAssistant.token === "" ? (await getBearerToken(wtsnAssistant.iamKey))["access_token"] : wtsnAssistant.token
+            setIsConnecting(true)
+            accessToken = (await getBearerToken(wtsnAssistant.iamKey))["access_token"]
+
             assert(accessToken !== undefined && accessToken !== "", "failed to get token")
         } catch (e) {
             console.error("failed to get a token - " + accessToken)
+            setIsConnecting(false)
         }
         let wsId
         try {
-            wsId = wtsnAssistant.workspaceId === "" ? (await getWorkspaceList(accessToken, wtsnAssistant.instanceId))["workspaces"][0]["workspace_id"] : wtsnAssistant.workspaceId
+            wsId = (await getWorkspaceList(accessToken, wtsnAssistant.instanceId))["workspaces"][0]["workspace_id"]
             console.log("workspace id:\n" + wsId)
+            setShowBot(true)
+            console.log("Watson Assistant session established")
         } catch (e) {
             console.error("failed to get the workspace id - " + wsId)
+        } finally {
+            setIsConnecting(false)
         }
 
-        // setToken(accessToken)
-        // setWorkspaceId(wsId)
         setWtsnAssistant({
             iamKey: wtsnAssistant.iamKey,
             instanceId: wtsnAssistant.instanceId,
@@ -147,7 +152,7 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
         })
         console.log(wtsnAssistant)
 
-        console.log("Watson Assistant session established")
+
     }
 
     if(showBot) {
@@ -173,7 +178,7 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
         return (
             <Fab
                 onClick={handleStartChatSession}
-                color="primary"
+                color={isConnecting ? "warning": "primary"}
                 aria-label="add"
                 sx={{
                     position: "fixed",
@@ -182,7 +187,9 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
                     zIndex: "999"
                 }}
             >
-                <ChatIcon />
+                {
+                    isConnecting ? <CircularProgress color="inherit" /> : <ChatIcon />
+                }
             </Fab>
         )
     }

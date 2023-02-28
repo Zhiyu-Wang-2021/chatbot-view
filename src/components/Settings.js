@@ -3,6 +3,7 @@ import {Button, Drawer, Stack} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import axios from 'axios'
+import {backendBaseUrl} from "../env";
 
 export default function Settings({settingOpen, setSettingOpen, wtsnAssistant, setWtsnAssistant}){
 
@@ -10,7 +11,7 @@ export default function Settings({settingOpen, setSettingOpen, wtsnAssistant, se
     const [instanceId, setInstanceId] = React.useState(wtsnAssistant.instanceId)
 
     const handleResetDB = () => {
-        let options = {method: 'DELETE', url: 'http://127.0.0.1:8000/del_json/'};
+        let options = {method: 'DELETE', url: backendBaseUrl + 'del_json/'};
 
         axios.request(options).then(function (response) {
             console.log(response.data);
