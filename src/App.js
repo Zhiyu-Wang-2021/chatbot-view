@@ -22,7 +22,7 @@ function App() {
         <div className="App">
             <Navbar setSettingOpen={setSettingOpen}/>
             <div style={{
-                marginTop: "80px",
+                paddingTop: "50px",
                 margin: "auto",
                 width: "60%"
             }}>
