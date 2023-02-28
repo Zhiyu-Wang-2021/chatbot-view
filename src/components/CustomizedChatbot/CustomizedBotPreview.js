@@ -9,7 +9,7 @@ import {Fab} from "@mui/material";
 import {getBearerToken, getWorkspaceList, sendMsgToWatsonAssistant} from "./watsonAssistantConnection";
 import HtmlMessage from "./customMsg";
 
-const botName = "ExperimentBot"
+const botName = "NHS Bot"
 
 
 export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
