@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 import Snackbar from "@mui/material/Snackbar";
 import LinearProgress from "@mui/material/LinearProgress";
+import * as assert from "assert";
 const instance = axios.create({
     baseURL: "http://127.0.0.1:8000/",
     timeout: 1000
@@ -75,9 +76,11 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
             setAllowPreview(false)
             let token = wtsnAssistant.token
             if(token === ""){
-                token = (await getBearerToken())["access_token"]
+                token = (await getBearerToken(wtsnAssistant.iamKey))["access_token"]
+                assert(token !== undefined, "failed to get token")
                 setWtsnAssistant({
                     token: token,
+                    iamKey: wtsnAssistant.iamKey,
                     instanceId: wtsnAssistant.instanceId,
                     workspaceId: wtsnAssistant.workspaceId
                 })
@@ -93,6 +96,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
             const newWSID = newWS["workspace_id"]
             console.log(newWSID)
             setWtsnAssistant({
+                iamKey: wtsnAssistant.iamKey,
                 token: wtsnAssistant.token,
                 instanceId: wtsnAssistant.instanceId,
                 workspaceId: newWSID

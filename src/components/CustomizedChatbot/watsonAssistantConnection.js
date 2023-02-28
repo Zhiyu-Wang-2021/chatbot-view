@@ -1,9 +1,21 @@
-export const getBearerToken = async () => {
-    const options = {method: 'GET'};
+import assert from "assert";
 
-    return await fetch('https://bingaccessforwatson.azurewebsites.net/api/getIAMBearerToken?code=G5Im9OxAR8gYcw8MXCMslqQPQXrIfvQnrXWYR3H1l52TAzFuJ6xz9g%3D%3D', options)
+export const getBearerToken = async (IAMKey) => {
+    console.log(IAMKey)
+    const options = {
+        method: 'GET',
+        headers: {
+            'iamkey': IAMKey
+        },
+    };
+
+    const res = await fetch('https://bingaccessforwatson.azurewebsites.net/api/getIAMBearerToken?code=G5Im9OxAR8gYcw8MXCMslqQPQXrIfvQnrXWYR3H1l52TAzFuJ6xz9g%3D%3D', options)
         .then(response => response.json())
         .catch(err => console.error(err))
+    if(res["errorMessage"] !== undefined){
+        console.error(res["errorMessage"])
+    }
+    return res
 }
 
 export const sendMsgToWatsonAssistant = async (instanceId, workspaceId, token, message) => {

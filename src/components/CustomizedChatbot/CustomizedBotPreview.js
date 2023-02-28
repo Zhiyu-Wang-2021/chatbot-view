@@ -8,8 +8,9 @@ import {Fab} from "@mui/material";
 
 import {getBearerToken, getWorkspaceList, sendMsgToWatsonAssistant} from "./watsonAssistantConnection";
 import HtmlMessage from "./customMsg";
+import assert from "assert";
 
-const botName = "NHS Bot"
+const botName = "NHSBot"
 
 
 export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
@@ -123,21 +124,23 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
         setShowBot(true)
         let accessToken
         try {
-            accessToken = wtsnAssistant.token === "" ? (await getBearerToken())["access_token"] : wtsnAssistant.token
+            accessToken = wtsnAssistant.token === "" ? (await getBearerToken(wtsnAssistant.iamKey))["access_token"] : wtsnAssistant.token
+            assert(accessToken !== undefined && accessToken !== "", "failed to get token")
         } catch (e) {
-            console.error("failed to get a token")
+            console.error("failed to get a token - " + accessToken)
         }
         let wsId
         try {
             wsId = wtsnAssistant.workspaceId === "" ? (await getWorkspaceList(accessToken, wtsnAssistant.instanceId))["workspaces"][0]["workspace_id"] : wtsnAssistant.workspaceId
             console.log("workspace id:\n" + wsId)
         } catch (e) {
-            console.error("failed to get the workspace id")
+            console.error("failed to get the workspace id - " + wsId)
         }
 
         // setToken(accessToken)
         // setWorkspaceId(wsId)
         setWtsnAssistant({
+            iamKey: wtsnAssistant.iamKey,
             instanceId: wtsnAssistant.instanceId,
             token: accessToken,
             workspaceId: wsId
