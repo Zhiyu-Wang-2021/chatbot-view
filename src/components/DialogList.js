@@ -10,10 +10,11 @@ import axios from "axios";
 import {useEffect} from "react";
 import {Button} from "@mui/material";
 import Box from "@mui/material/Box";
+import {backendBaseUrl} from "../env";
 
 
 const instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/url_list/",
+    baseURL: backendBaseUrl + "url_list/",
     timeout: 1000
 })
 
