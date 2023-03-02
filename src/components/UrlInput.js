@@ -75,8 +75,9 @@ export default function UrlInput() {
                 generate_instance.post("", {
                     "url": urlRef.current.value,
                     "ref": referenceNum.data
-                }).then(() => {
+                }).then(res => {
                     console.log("json generated")
+                    console.log(res.data)
                     setIsSucc(true)
                     handleSuccOpen()
                     setIsLoading(false)
