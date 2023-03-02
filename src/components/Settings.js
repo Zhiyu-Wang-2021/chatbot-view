@@ -63,7 +63,7 @@ export default function Settings({settingOpen, setSettingOpen, wtsnAssistant, se
                             value={instanceId}
                             onChange={handleInstanceIdChange}
                         />
-                        <Button onClick={handleResetDB}>Reset Database</Button>
+                        <Button onClick={handleResetDB} variant="contained" color="error">Clean generation history</Button>
                     </Stack>
                 </Box>
 

@@ -11,6 +11,9 @@ import {useEffect} from "react";
 import {Button} from "@mui/material";
 import Box from "@mui/material/Box";
 import {backendBaseUrl} from "../env";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import AppBar from "@mui/material/AppBar";
 
 
 const instance = axios.create({
@@ -42,7 +45,17 @@ export default function DialogList() {
 
     return (
         <Box sx={{padding: "10px"}}>
-            <Button variant="outlined" onClick={refreshTable} sx={{margin: "6px"}}>Refresh Table</Button>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        Generation History
+                    </Typography>
+                    <div style={{ flexGrow: 5 }}></div>
+                    <div style={{ flexGrow: 1 }}>
+                        <Button color="inherit" variant="outlined" onClick={refreshTable} sx={{margin: "6px"}}>Refresh</Button>
+                    </div>
+                </Toolbar>
+            </AppBar>
             <TableContainer component={Paper}>
                 <Table aria-label="simple table" size="small" >
                     <TableHead>

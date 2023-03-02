@@ -29,7 +29,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
     const [isSucc, setIsSucc] = React.useState(false);
     const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false);
     const [hasError, setHasError] = React.useState(false)
-    const [helperText, setHelperText] = React.useState("")
+    const [helperText, setHelperText] = React.useState("You can get the code by copying it from the table below")
 
     const handleSuccOpen = () => {
         setIsOpenSuccNotif(true);
@@ -143,7 +143,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
                     fullWidth
                     id="dialog-ref-input"
                     label="Dialog Reference Code"
-                    variant="standard"
+                    variant="filled"
                     inputRef={ dialogRef }
                     error={hasError}
                     helperText={helperText}
@@ -153,7 +153,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
                     disabled
                     fullWidth
                     multiline
-                    maxRows={4}
+                    maxRows={8}
                     id="dialog-result"
                     label="Dialog JSON"
                     variant="outlined"
@@ -162,7 +162,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
 
             </Box>
             <ButtonGroup variant="contained" aria-label="text button group">
-                <Button onClick={handleCopy} disabled={!allowDownloadAndCopy}>Copy to clipboard</Button>
+                {/*<Button onClick={handleCopy} disabled={!allowDownloadAndCopy}>Copy to clipboard</Button>*/}
                 <Button onClick={handleDownload} disabled={!allowDownloadAndCopy}>Download</Button>
                 <Button onClick={handlePreview} disabled={!allowPreview}>Preview</Button>
             </ButtonGroup>
