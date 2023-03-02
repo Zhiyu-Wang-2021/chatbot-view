@@ -24,6 +24,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
     const dialogRef = React.useRef('')
     const [loadingPreview, setLoadingPreview] = React.useState(false)
     const [allowPreview, setAllowPreview] = React.useState(false)
+    const [allowDownloadAndCopy, setAllowDownloadAndCopy] = React.useState(false)
     const [dialogJson, setDialogJson] = React.useState("")
     const [isSucc, setIsSucc] = React.useState(false);
     const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false);
@@ -49,15 +50,18 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
             let result = answer.data
             if(Object.keys(result).length === 0) {
                 setHasError(true)
+                setAllowDownloadAndCopy(false)
                 setHelperText("The JSON is still generating or there are some errors")
             } else {
                 setDialogJson(JSON.stringify(answer.data))
                 setAllowPreview(true)
+                setAllowDownloadAndCopy(true)
                 setHasError(false)
                 setHelperText("")
             }
         } catch (e) {
             setHasError(true)
+            setAllowDownloadAndCopy(false)
             setHelperText("Not Found")
         }
     }
@@ -117,6 +121,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
             console.log("workspace set successful")
         } catch (e) {
             setAllowPreview(true)
+            setAllowDownloadAndCopy(true)
             setIsSucc(false)
             setLoadingPreview(false)
             console.error(e)
@@ -157,8 +162,8 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
 
             </Box>
             <ButtonGroup variant="contained" aria-label="text button group">
-                <Button onClick={handleCopy} disabled={!allowPreview}>Copy to clipboard</Button>
-                <Button onClick={handleDownload} disabled={!allowPreview}>Download</Button>
+                <Button onClick={handleCopy} disabled={!allowDownloadAndCopy}>Copy to clipboard</Button>
+                <Button onClick={handleDownload} disabled={!allowDownloadAndCopy}>Download</Button>
                 <Button onClick={handlePreview} disabled={!allowPreview}>Preview</Button>
             </ButtonGroup>
             {
