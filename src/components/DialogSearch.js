@@ -27,6 +27,8 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
     const [dialogJson, setDialogJson] = React.useState("")
     const [isSucc, setIsSucc] = React.useState(false);
     const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false);
+    const [hasError, setHasError] = React.useState(false)
+    const [helperText, setHelperText] = React.useState("")
 
     const handleSuccOpen = () => {
         setIsOpenSuccNotif(true);
@@ -45,13 +47,18 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
             let answer = await instance.get("get_json/?id=" +　dialogRef.current.value)
             console.log(answer.data)
             let result = answer.data
-            if(Object.keys(result).length === 0) setDialogJson("JSON still generating or there are some errors")
-            else {
+            if(Object.keys(result).length === 0) {
+                setHasError(true)
+                setHelperText("The JSON is still generating or there are some errors")
+            } else {
                 setDialogJson(JSON.stringify(answer.data))
                 setAllowPreview(true)
+                setHasError(false)
+                setHelperText("")
             }
         } catch (e) {
-            setDialogJson("Not Found")
+            setHasError(true)
+            setHelperText("Not Found")
         }
     }
 
@@ -133,6 +140,8 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
                     label="Dialog Reference Code"
                     variant="standard"
                     inputRef={ dialogRef }
+                    error={hasError}
+                    helperText={helperText}
                 />
                 <Button variant="contained" onClick={ handleRefCodeSubmit }>Submit</Button>
                 <TextField
@@ -148,8 +157,8 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
 
             </Box>
             <ButtonGroup variant="contained" aria-label="text button group">
-                <Button onClick={handleCopy} >Copy to clipboard</Button>
-                <Button onClick={handleDownload}>Download</Button>
+                <Button onClick={handleCopy} disabled={!allowPreview}>Copy to clipboard</Button>
+                <Button onClick={handleDownload} disabled={!allowPreview}>Download</Button>
                 <Button onClick={handlePreview} disabled={!allowPreview}>Preview</Button>
             </ButtonGroup>
             {
@@ -170,7 +179,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
                 onClose={handleSuccClose}
             >
                 <Alert onClose={handleSuccClose} severity={isSucc ? "success" : "error"} sx={{ width: '100%' }}>
-                    {isSucc ? "Preview ready" : "JSON fail to submit"}
+                    {isSucc ? "Preview ready - try it with the chat button at right bottom corner" : "JSON fail to upload"}
                 </Alert>
             </Snackbar>
         </div>

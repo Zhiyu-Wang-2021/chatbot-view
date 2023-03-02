@@ -15,7 +15,8 @@ import {backendBaseUrl} from "../env";
 
 const instance = axios.create({
     baseURL: backendBaseUrl + "url_list/",
-    timeout: 1000
+    timeout: 1000,
+    headers: {'Access-Control-Allow-Origin': '*'}
 })
 
 function createData(url, ref, key) {

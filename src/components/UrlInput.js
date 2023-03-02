@@ -1,6 +1,15 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
-import {Alert, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import {
+    Alert,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    InputAdornment
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import Snackbar from '@mui/material/Snackbar';
 import LinearProgress from '@mui/material/LinearProgress';
@@ -17,73 +26,80 @@ const generate_instance = axios.create({
 })
 
 export default function UrlInput() {
-    const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false);
-    const [isSucc, setIsSucc] = React.useState(false);
+    const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false)
+    const [isSucc, setIsSucc] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
+    const [refNum, setRefNum] = React.useState('')
+    const urlRef = React.useRef('')
+    const [openSubmitNotif, setOpenSubmitNotif] = React.useState(false)
+    const [hasError, setHasError] = React.useState(false)
+    const [helperText, setHelperText] = React.useState("")
+
 
     const handleSuccOpen = () => {
-        setIsOpenSuccNotif(true);
-    };
+        setIsOpenSuccNotif(true)
+    }
 
     const handleSuccClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
         }
 
-        setIsOpenSuccNotif(false);
-    };
+        setIsOpenSuccNotif(false)
+    }
 
-    // const notifMsg = () => {
-    //     if(isSucc) return "JSON successfully generated"
-    //     else return "JSON fail to generate"
-    // }
-
-    const [refNum, setRefNum] = React.useState('')
-    const urlRef = React.useRef('')
-
-    const [openSubmitNotif, setOpenSubmitNotif] = React.useState(false);
     const handleClickOpenSubmitNotif = (referenceNum) => {
 
         setRefNum(referenceNum)
-        setOpenSubmitNotif(true);
-    };
+        setOpenSubmitNotif(true)
+    }
 
     const handleCloseSubmitNotif = () => {
-        setOpenSubmitNotif(false);
-    };
+        setOpenSubmitNotif(false)
+    }
 
     const handleUrlSubmit = async () => {
-
-        let referenceNum = await register_instance.post("", {
-            "url": urlRef.current.value
-        }).catch((err) => {
-            console.log("register failed")
-            console.log(err.message)
-        })  // use .data to fetch information in the axios promise
-        if(referenceNum) {
-            handleClickOpenSubmitNotif(referenceNum)
-            console.log(referenceNum)
-            setIsLoading(true)
-            generate_instance.post("", {
-                "url": urlRef.current.value,
-                "ref": referenceNum.data
-            }).then(() => {
-                console.log("json generated")
-                setIsSucc(true)
-                handleSuccOpen()
-                setIsLoading(false)
+        if(urlRef.current.value !== "" && urlRef.current.value !== undefined) {
+            let referenceNum = await register_instance.post("", {
+                "url": urlRef.current.value
             }).catch((err) => {
-                console.log("generation failed")
+                setHasError(true)
+                setHelperText("Failed to register this URL to our database. Please Try again.")
+                console.log("register failed")
                 console.log(err.message)
+            })  // use .data to fetch information in the axios promise
+            if (referenceNum) {
+                handleClickOpenSubmitNotif(referenceNum)
+                console.log(referenceNum)
+                setIsLoading(true)
+                generate_instance.post("", {
+                    "url": urlRef.current.value,
+                    "ref": referenceNum.data
+                }).then(() => {
+                    console.log("json generated")
+                    setIsSucc(true)
+                    handleSuccOpen()
+                    setIsLoading(false)
+                }).catch((err) => {
+                    console.log("generation failed")
+                    console.log(err.message)
+                    setIsSucc(false)
+                    handleSuccOpen()
+                    setIsLoading(false)
+                    setHasError(true)
+                    setHelperText("Failed to generate the dialog JSON file. Please try again.")
+                })
+                console.log("waiting dialog json to be generated: " + referenceNum.data)
+            } else {
                 setIsSucc(false)
                 handleSuccOpen()
-                setIsLoading(false)
-            })
-            console.log("waiting dialog json to be generated: " + referenceNum.data)
+                console.log("submit failed")
+            }
+            setHasError(false)
+            setHelperText("")
         } else {
-            setIsSucc(false)
-            handleSuccOpen()
-            console.log("submit failed")
+            setHasError(true)
+            setHelperText("Invalid URL")
         }
     }
 
@@ -108,9 +124,14 @@ export default function UrlInput() {
                 <TextField
                     fullWidth
                     id="url-input"
-                    label="Website"
+                    label="URL to your website homepage"
                     variant="standard"
                     inputRef={ urlRef }
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start">https://</InputAdornment>,
+                    }}
+                    error={ hasError }
+                    helperText={ helperText }
                 />
                 <Button variant="contained" onClick={ handleUrlSubmit }>Submit</Button>
             </Box>
