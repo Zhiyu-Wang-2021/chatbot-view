@@ -22,7 +22,7 @@ const register_instance = axios.create({
 })
 const generate_instance = axios.create({
     baseURL: backendBaseUrl + "generate_json_e/",
-    timeout: 1000 * 60 * 10
+    timeout: 1000 * 60 * 20
 })
 
 export default function UrlInput() {
@@ -84,6 +84,7 @@ export default function UrlInput() {
                 }).catch((err) => {
                     console.log("generation failed")
                     console.log(err.message)
+                    console.log(err.response)
                     setIsSucc(false)
                     handleSuccOpen()
                     setIsLoading(false)
