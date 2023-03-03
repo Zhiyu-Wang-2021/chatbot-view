@@ -66,11 +66,11 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
         }
     }
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(dialogJson).then(
-            () => console.log('copied')
-        )
-    }
+    // const handleCopy = () => {
+    //     navigator.clipboard.writeText(dialogJson).then(
+    //         () => console.log('copied')
+    //     )
+    // }
 
     const handleDownload = () => {
         const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
@@ -148,7 +148,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
                     error={hasError}
                     helperText={helperText}
                 />
-                <Button variant="contained" onClick={ handleRefCodeSubmit }>Submit</Button>
+                <Button variant="contained" onClick={ handleRefCodeSubmit }>Get JSON file</Button>
                 <TextField
                     disabled
                     fullWidth

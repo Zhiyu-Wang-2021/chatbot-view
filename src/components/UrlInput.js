@@ -82,14 +82,14 @@ export default function UrlInput() {
                     handleSuccOpen()
                     setIsLoading(false)
                 }).catch((err) => {
-                    console.log("generation failed")
+                    console.log("generation takes too long")
                     console.log(err.message)
                     console.log(err.response)
                     setIsSucc(false)
                     handleSuccOpen()
                     setIsLoading(false)
                     setHasError(true)
-                    setHelperText("Failed to generate the dialog JSON file. Please try again.")
+                    setHelperText("Please try to refresh the page and see if the JSON is already generated.")
                 })
                 console.log("waiting dialog json to be generated: " + referenceNum.data)
             } else {
@@ -112,7 +112,7 @@ export default function UrlInput() {
     return (
         <div>
             <Box sx={{ display: isLoading ? 'relative' : 'none' }} >
-                <p>generating...</p>
+                <p>Generating... (Do not refresh the page.)</p>
                 <LinearProgress />
             </Box>
             <Box
@@ -135,7 +135,7 @@ export default function UrlInput() {
                     error={ hasError }
                     helperText={ helperText }
                 />
-                <Button variant="contained" onClick={ handleUrlSubmit }>Submit</Button>
+                <Button variant="contained" onClick={ handleUrlSubmit }>Generate</Button>
             </Box>
             <Dialog
                 open={openSubmitNotif}
@@ -144,7 +144,7 @@ export default function UrlInput() {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Your chatbot will be ready in 10 minutes"}
+                    {"Your chatbot will be ready in 20 minutes"}
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">

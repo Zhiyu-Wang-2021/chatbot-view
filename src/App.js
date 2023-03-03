@@ -12,11 +12,14 @@ import {iamKey, instanceId} from "./env";
 function App() {
     const [settingOpen, setSettingOpen] = React.useState(false)
     const [wtsnAssistant, setWtsnAssistant] = React.useState({
-        iamKey: iamKey,
-        instanceId: instanceId,
+        iamKey: localStorage.getItem('iamKey') || iamKey,
+        instanceId: localStorage.getItem('instanceId') || instanceId,
         workspaceId: "",
         token: ""
     })
+
+    localStorage.setItem('iamKey', wtsnAssistant.iamKey)
+    localStorage.setItem('instanceId', wtsnAssistant.instanceId)
 
   return (
         <div className="App">
