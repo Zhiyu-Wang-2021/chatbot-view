@@ -89,7 +89,11 @@ export default function UrlInput() {
                     handleSuccOpen()
                     setIsLoading(false)
                     setHasError(true)
-                    setHelperText("Please try to refresh the page and see if the JSON is already generated.")
+                    setHelperText(
+                        err.response !== undefined ?
+                        `An error occurred. (Code: ${err.response.status})` :
+                        "Please try to refresh the page and see if the JSON is already generated."
+                    )
                 })
                 console.log("waiting dialog json to be generated: " + referenceNum.data)
             } else {
@@ -112,7 +116,7 @@ export default function UrlInput() {
     return (
         <div>
             <Box sx={{ display: isLoading ? 'relative' : 'none' }} >
-                <p>Generating... (Do not refresh the page.)</p>
+                <p>Generating... (Please do not refresh the page.)</p>
                 <LinearProgress />
             </Box>
             <Box
