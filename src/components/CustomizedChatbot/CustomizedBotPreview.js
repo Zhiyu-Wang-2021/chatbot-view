@@ -31,17 +31,17 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
         botName: botName,
         customStyles: {
             botMessageBox: {
-                backgroundColor: '#1565c0',
+                backgroundColor: '#005EB8',
             },
             chatButton: {
-                backgroundColor: '#1565c0',
+                backgroundColor: '#005EB8',
             },
         },
         customComponents: {
             // Replaces the default header
             header: () => (<div
                 style={{
-                    backgroundColor: '#1565c0',
+                    backgroundColor: '#005EB8',
                     padding: "12px",
                     borderRadius: "3px",
                     color: "white",
