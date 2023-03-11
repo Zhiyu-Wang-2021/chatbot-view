@@ -109,14 +109,10 @@ export default function UrlInput() {
         }
     }
 
-
-
-
-
     return (
         <div>
             <Box sx={{ display: isLoading ? 'relative' : 'none' }} >
-                <p>Generating... (Please do not refresh the page.)</p>
+                <p>Generating... (Please do not refresh the page!)</p>
                 <LinearProgress />
             </Box>
             <Box
@@ -170,7 +166,7 @@ export default function UrlInput() {
                 onClose={handleSuccClose}
             >
                 <Alert onClose={handleSuccClose} severity={isSucc ? "success" : "error"} sx={{ width: '100%' }}>
-                    {isSucc ? "JSON successfully generated" : "JSON fail to generate"}
+                    {isSucc ? "JSON successfully generated" : "JSON failed to generate"}
                 </Alert>
             </Snackbar>
         </div>
