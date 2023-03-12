@@ -135,7 +135,7 @@ export default function UrlInput() {
                     error={ hasError }
                     helperText={ helperText }
                 />
-                <Button variant="contained" onClick={ handleUrlSubmit }>Generate</Button>
+                <Button variant="contained" onClick={ handleUrlSubmit }>Generate my Chatbot</Button>
             </Box>
             <Dialog
                 open={openSubmitNotif}
@@ -151,7 +151,7 @@ export default function UrlInput() {
                         {"Your URL: " + urlRef.current.value + "\n"}
                     </DialogContentText>
                     <DialogContentText id="alert-dialog-description">
-                        {"Dialog Reference Code: " + refNum.data + "\n"}
+                        {"Reference Code: " + refNum.data + "\n"}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

@@ -142,22 +142,24 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
                 <TextField
                     fullWidth
                     id="dialog-ref-input"
-                    label="Dialog Reference Code"
+                    label="Chatbot Reference Code"
                     variant="filled"
                     inputRef={ dialogRef }
                     error={hasError}
                     helperText={helperText}
                 />
-                <Button variant="contained" onClick={ handleRefCodeSubmit }>Get JSON file</Button>
+                <Button variant="contained" onClick={ handleRefCodeSubmit }>Get my Chatbot JSON File</Button>
+                <h3>Step 3: preview your chatbot and embed it to your website</h3>
                 <TextField
                     disabled
                     fullWidth
                     multiline
                     maxRows={8}
                     id="dialog-result"
-                    label="Dialog JSON"
+                    label="Chatbot JSON"
                     variant="outlined"
                     value={ dialogJson }
+                    helperText={"Your Chatbot JSON will appear here after inputting our reference code."}
                 />
 
             </Box>
