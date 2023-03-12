@@ -1,24 +1,40 @@
 import React from 'react'
-import {Button, Drawer, Stack} from "@mui/material";
+import {Alert, Button, Drawer, Stack} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import axios from 'axios'
 import {backendBaseUrl} from "../env";
+import Snackbar from "@mui/material/Snackbar";
 
 export default function Settings({settingOpen, setSettingOpen, wtsnAssistant, setWtsnAssistant}){
 
     const [iamKey, setIamKey] = React.useState(wtsnAssistant.iamKey)
     const [instanceId, setInstanceId] = React.useState(wtsnAssistant.instanceId)
+    const [isSucc, setIsSucc] = React.useState(false)
+    const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false)
+
+
+    const handleSuccClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setIsOpenSuccNotif(false)
+    }
 
     const handleResetDB = () => {
-        let options = {method: 'DELETE', url: backendBaseUrl + 'del_json/'};
+        let options = {method: 'DELETE', url: backendBaseUrl + 'del_json/'}
 
         axios.request(options).then(function (response) {
-            console.log(response.data);
+            setIsSucc(true)
+            setIsOpenSuccNotif(true)
+            console.log(response.data)
         }).catch(function (error) {
-            console.error(error);
-        });
-    };
+            setIsSucc(false)
+            setIsOpenSuccNotif(true)
+            console.error(error)
+        })
+    }
     const handleIamKeyChange = (event) => {
         setIamKey(event.target.value)
     };
@@ -40,6 +56,7 @@ export default function Settings({settingOpen, setSettingOpen, wtsnAssistant, se
                         workspaceId: wtsnAssistant.workspaceId,
                         token: wtsnAssistant.token
                     })
+                    setIsOpenSuccNotif(false)
                     console.log(wtsnAssistant)
                 }}
             >
@@ -68,6 +85,15 @@ export default function Settings({settingOpen, setSettingOpen, wtsnAssistant, se
                 </Box>
 
             </Drawer>
+            <Snackbar
+                open={isOpenSuccNotif}
+                autoHideDuration={8000}
+                onClose={handleSuccClose}
+            >
+                <Alert onClose={handleSuccClose} severity={isSucc ? "success" : "error"} sx={{ width: '100%' }}>
+                    {isSucc ? "Generation history deleted. (Refresh the history table to see the change.)" : "Failed to delete the generation history"}
+                </Alert>
+            </Snackbar>
         </div>
     )
 }

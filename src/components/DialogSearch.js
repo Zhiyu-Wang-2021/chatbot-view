@@ -164,7 +164,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
             <ButtonGroup variant="contained" aria-label="text button group">
                 {/*<Button onClick={handleCopy} disabled={!allowDownloadAndCopy}>Copy to clipboard</Button>*/}
                 <Button onClick={handleDownload} disabled={!allowDownloadAndCopy}>Download</Button>
-                <Button onClick={handlePreview} disabled={!allowPreview}>Preview</Button>
+                <Button onClick={handlePreview} disabled={!allowPreview}>Preview Your Chatbot</Button>
             </ButtonGroup>
             {
                 loadingPreview && (
