@@ -127,7 +127,7 @@ export default function UrlInput() {
                     fullWidth
                     id="url-input"
                     label="URL to your website homepage"
-                    variant="filled"
+                    variant="outlined"
                     inputRef={ urlRef }
                     InputProps={{
                         startAdornment: <InputAdornment position="start">https://</InputAdornment>,

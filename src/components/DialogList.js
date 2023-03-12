@@ -78,6 +78,9 @@ export default function DialogList() {
                         ))}
                     </TableBody>
                 </Table>
+                {rows.length === 0 && (
+                    <p>Empty</p>
+                )}
             </TableContainer>
         </Box>
     );

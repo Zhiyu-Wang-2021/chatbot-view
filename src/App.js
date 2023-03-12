@@ -31,6 +31,7 @@ function App() {
             }}>
                 <h3>Step 1: use your trust's website to generate a chatbot</h3>
                 <UrlInput />
+                <Divider sx={{margin: "15px"}}/>
                 <h3>Step 2: use the reference code to get your chatbot</h3>
                 <DialogSearch wtsnAssistant={wtsnAssistant} setWtsnAssistant={setWtsnAssistant}/>
                 <Divider sx={{margin: "15px"}}/>

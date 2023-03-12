@@ -1,6 +1,6 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
-import {Alert, Button, ButtonGroup} from "@mui/material";
+import {Alert, Button, ButtonGroup, Divider} from "@mui/material";
 import Box from "@mui/material/Box";
 import {
     newWorkspace,
@@ -143,12 +143,13 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
                     fullWidth
                     id="dialog-ref-input"
                     label="Chatbot Reference Code"
-                    variant="filled"
+                    variant="outlined"
                     inputRef={ dialogRef }
                     error={hasError}
                     helperText={helperText}
                 />
                 <Button variant="contained" onClick={ handleRefCodeSubmit }>Get my Chatbot JSON File</Button>
+                <Divider sx={{margin: "15px"}}/>
                 <h3>Step 3: preview your chatbot and embed it to your website</h3>
                 <TextField
                     disabled
@@ -159,7 +160,7 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
                     label="Chatbot JSON"
                     variant="outlined"
                     value={ dialogJson }
-                    helperText={"Your Chatbot JSON will appear here after inputting our reference code."}
+                    helperText={"Your Chatbot JSON will appear here after inputting your reference code"}
                 />
 
             </Box>

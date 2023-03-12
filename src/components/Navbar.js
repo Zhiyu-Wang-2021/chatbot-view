@@ -11,8 +11,8 @@ export default function Navbar({setSettingOpen}) {
         window.open('https://students.cs.ucl.ac.uk/2022/group12/index.html')
     }
 
-    const handleLinkToOurGitHub = () => {
-        window.open('https://github.com/Zhiyu-Wang-2021/chatbot-view')
+    const handleLinkToHelpPage = () => {
+        window.open('https://liveuclac-my.sharepoint.com/:w:/g/personal/zcabanq_ucl_ac_uk/EZ5RTDqPejtGqwUGTVUnJv4BQZl3Vy4WxA-VRFIfBEYHWw?e=on63gz')
     }
 
     return (
@@ -27,7 +27,7 @@ export default function Navbar({setSettingOpen}) {
                         <div style={{ flexGrow: 5 }}></div>
                         <div style={{ flexGrow: 1 }}>
                             <Button color="inherit" onClick={handleLinkToOurSite}>About</Button>
-                            <Button color="inherit" onClick={handleLinkToOurGitHub}>Help</Button>
+                            <Button color="inherit" onClick={handleLinkToHelpPage}>Help</Button>
                             <Button color="inherit" onClick={() => setSettingOpen(true)}>Settings</Button>
                         </div>
                     </Toolbar>
