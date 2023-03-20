@@ -71,6 +71,15 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
         },
     };
 
+    /**
+     * This function listens the message input from user, and it will call different actions
+     * according to the message parse result. Here, as long as the message is not empty, it
+     * will call the "handleMessage" function from the "ActionProvider"
+     * @param children
+     * @param actions
+     * @returns {JSX.Element}
+     * @constructor
+     */
     const MessageParser = ({ children, actions }) => {
         const parse = (message) => {
             if(message !== ""){
@@ -90,7 +99,18 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
         );
     };
 
+    /**
+     * This function stores the actions that can be called by the "MessageParser".
+     * @param setState
+     * @param children
+     * @returns {JSX.Element}
+     * @constructor
+     */
     const ActionProvider = ({ setState, children }) => {
+        /*
+            This function send the message from the user to Watson Assistant and creates an answer message
+            element from Watson Assistant's response
+         */
         const handleMessage = async (userMsg) => {
 
             const resp = await sendMsgToWatsonAssistant(wtsnAssistant.instanceId, wtsnAssistant.workspaceId, wtsnAssistant.token, userMsg)
@@ -120,6 +140,10 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
             </div>
         );
     };
+    /**
+     * This function starts a session with Watson Assistant using the first workspace
+     * @returns {Promise<void>}
+     */
     const handleStartChatSession = async () => {
         console.log(wtsnAssistant)
         let accessToken
@@ -134,6 +158,7 @@ export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
         }
         let wsId
         try {
+            // connect to the first workspace
             wsId = (await getWorkspaceList(accessToken, wtsnAssistant.instanceId))["workspaces"][0]["workspace_id"]
             console.log("workspace id:\n" + wsId)
             setShowBot(true)

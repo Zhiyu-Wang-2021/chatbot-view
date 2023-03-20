@@ -31,10 +31,16 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
     const [hasError, setHasError] = React.useState(false)
     const [helperText, setHelperText] = React.useState("You can get the code by copying it from the table below")
 
+    /**
+     * This function is used for showing the chatbot preview ready message
+     */
     const handleSuccOpen = () => {
         setIsOpenSuccNotif(true);
     };
 
+    /**
+     * This function is used for closing the chatbot preview ready message
+     */
     const handleSuccClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -43,6 +49,14 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
         setIsOpenSuccNotif(false);
     };
 
+    /**
+     * This function handles reference code submission.
+     * It will first send the reference code to the backend and let the backend find the
+     * corresponding chatbot JSON file. After getting the chatbot file, it will show the
+     * file in the text field and allow the user to download or preview the chatbot.
+     *
+     * @returns {Promise<void>}
+     */
     const handleRefCodeSubmit = async () => {
         try {
             let answer = await instance.get("get_json/?id=" +　dialogRef.current.value)
@@ -66,12 +80,10 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
         }
     }
 
-    // const handleCopy = () => {
-    //     navigator.clipboard.writeText(dialogJson).then(
-    //         () => console.log('copied')
-    //     )
-    // }
-
+    /**
+     * This function starts the download of the chatbot file.
+     * The download form will be JSON.
+     */
     const handleDownload = () => {
         const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
             dialogJson
@@ -83,6 +95,14 @@ export default function DialogSearch({wtsnAssistant, setWtsnAssistant}) {
         link.click();
     }
 
+    /**
+     * This function starts a connection with Watson Assistant.
+     * It gets an access token first.
+     * It then deletes all the existing Watson Assistant workspaces and create a new one.
+     * Finally, it will let the user know whether the session is successfully established.
+     * If failed, the error message will be logged in the console.
+     * @returns {Promise<void>}
+     */
     const handlePreview = async () => {
         try {
             setLoadingPreview(true)

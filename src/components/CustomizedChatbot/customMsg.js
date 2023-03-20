@@ -1,6 +1,13 @@
 import React from 'react'
 import {Card} from "@mui/material";
 
+/**
+ * This is the message component.
+ * It allows message to include <a> tag for source link.
+ * @param props
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function HtmlMessage(props){
     const msg = props.payload.message.split("\n")
 

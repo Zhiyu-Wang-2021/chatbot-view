@@ -25,6 +25,14 @@ const generate_instance = axios.create({
     timeout: 1000 * 60 * 20
 })
 
+
+/**
+ * this component is used for inputting the trust's URL
+ * after inputting the URL, it will tell the backend to start generating the chatbot JSON file
+ * in the meantime, it will also provide the user with the Reference Code that is used to get the chatbot later
+ * @returns {JSX.Element}
+ * @constructor
+ */
 export default function UrlInput() {
     const [isOpenSuccNotif, setIsOpenSuccNotif] = React.useState(false)
     const [isSucc, setIsSucc] = React.useState(false)
@@ -36,10 +44,16 @@ export default function UrlInput() {
     const [helperText, setHelperText] = React.useState("")
 
 
+    /**
+     * This function is used for showing the generation success message
+     */
     const handleSuccOpen = () => {
         setIsOpenSuccNotif(true)
     }
 
+    /**
+     * This function is used for closing the generation success message
+     */
     const handleSuccClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -48,16 +62,31 @@ export default function UrlInput() {
         setIsOpenSuccNotif(false)
     }
 
+    /**
+     * This function is used for showing the generation start message.
+     * A reference code will be included in the message.
+     */
     const handleClickOpenSubmitNotif = (referenceNum) => {
 
         setRefNum(referenceNum)
         setOpenSubmitNotif(true)
     }
 
+    /**
+     * This function is used for closing the generation start message
+     */
     const handleCloseSubmitNotif = () => {
         setOpenSubmitNotif(false)
     }
 
+    /**
+     * This function handles the URL submission.
+     * It posts the URL string got from urlRef to the backend to register the URL in the database.
+     * After the URL successfully registered, it will post both the URL string and the Reference Code
+     * to the backend to start the chatbot generation.
+     * In the end, a notification will appear to let the user know if the generation is successful.
+     * @returns {Promise<void>}
+     */
     const handleUrlSubmit = async () => {
         if(urlRef.current.value !== "" && urlRef.current.value !== undefined) {
             let referenceNum = await register_instance.post("", {
