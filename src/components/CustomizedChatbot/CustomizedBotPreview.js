@@ -10,7 +10,7 @@ import {getBearerToken, getWorkspaceList, sendMsgToWatsonAssistant} from "./wats
 import HtmlMessage from "./customMsg";
 import assert from "assert";
 
-const botName = "NHSBot"
+const botName = "NHS Auto-chatbot"
 
 
 export default function ChatbotPreview({wtsnAssistant, setWtsnAssistant}) {
